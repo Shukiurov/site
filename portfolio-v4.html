@@ -1,0 +1,1647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ali Shukiurov</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,600;0,700;1,300;1,700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ─────────────────────────────────────
+   ALI SHUKIUROV  ·  Chocolate & Beige
+───────────────────────────────────── */
+:root{
+  /* BEIGE side */
+  --b0: #f8f2e6;   /* lightest beige — page bg */
+  --b1: #f0e8d5;   /* card face */
+  --b2: #e4d8c0;   /* subtle surface */
+  --b3: #d0c0a0;   /* borders */
+  --b4: #b89c78;   /* caramel mid */
+
+  /* CHOCOLATE side */
+  --c0: #1e0e04;   /* deepest */
+  --c1: #2e1a08;   /* dark choc */
+  --c2: #4a2c10;   /* medium choc */
+  --c3: #6b4020;   /* milk choc */
+  --c4: #8c5c32;   /* light choc / accent */
+
+  /* ACCENT — rich gold-amber on dark, choc on light */
+  --acc: #c8820a;   /* amber gold */
+  --acc2:#a06010;   /* deeper amber */
+
+  /* TEXT */
+  --t-dark: #1e0e04;
+  --t-mid:  #4a2c10;
+  --t-soft: #7a5030;
+  --t-pale: #b89c78;
+
+  /* CARD GLOW */
+  --glow-c: rgba(200,130,10,.18);
+  --glow-b: rgba(180,156,120,.15);
+
+  --nav-h: 58px;
+  --W: 1380px;
+  --gap: 10px;
+  --r: 16px;
+  --pad: clamp(14px,3vw,48px);
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--c0);
+  color:var(--b1);
+  font-family:'Inter',sans-serif;
+  min-height:100vh;
+  overflow-x:hidden;
+  cursor:none;
+}
+
+/* Paper grain */
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='256' height='256' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  opacity:.55;
+}
+
+/* ── CURSOR — glowing dot + ring ── */
+#cur{
+  position:fixed;z-index:9999;pointer-events:none;
+  width:8px;height:8px;border-radius:50%;
+  background:var(--acc);
+  box-shadow:0 0 12px var(--acc), 0 0 24px rgba(200,130,10,.4);
+  transform:translate(-50%,-50%);
+}
+#cur2{
+  position:fixed;z-index:9998;pointer-events:none;
+  width:30px;height:30px;border-radius:50%;
+  border:1.5px solid rgba(200,130,10,.5);
+  transform:translate(-50%,-50%);
+  transition:width .15s,height .15s;
+}
+body:has(.cell:hover) #cur2{width:48px;height:48px}
+body:has(button:hover) #cur{box-shadow:0 0 18px var(--acc),0 0 36px rgba(200,130,10,.6)}
+@media(max-width:600px){#cur,#cur2{display:none}body{cursor:auto}}
+
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-track{background:var(--b2)}
+::-webkit-scrollbar-thumb{background:var(--c3);border-radius:2px}
+
+/* ─────────────── NAV ─────────────── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:500;
+  height:var(--nav-h);
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(15,6,0,.97);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid rgba(200,130,10,.18);
+  box-shadow:0 2px 24px rgba(0,0,0,.6);
+}
+.nav-in{
+  width:100%;max-width:var(--W);padding:0 var(--pad);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.logo{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.4rem;font-weight:700;letter-spacing:1px;
+  color:var(--b0);
+}
+.logo em{font-style:italic;color:var(--acc)}
+
+.nav-links{display:flex;gap:2px}
+.nl{
+  background:none;border:none;color:rgba(240,232,213,.55);
+  font-family:'Inter',sans-serif;font-size:.8rem;font-weight:500;
+  padding:7px 13px;border-radius:6px;cursor:none;transition:color .2s,background .2s;
+}
+.nl:hover{color:var(--b0);background:rgba(240,232,213,.08)}
+
+.nav-r{display:flex;align-items:center;gap:8px}
+.lbox{
+  display:flex;gap:3px;padding:3px;
+  background:rgba(240,232,213,.06);
+  border:1px solid rgba(200,130,10,.2);border-radius:6px;
+}
+.lb{
+  background:none;border:none;color:rgba(240,232,213,.4);
+  font-family:'JetBrains Mono',monospace;
+  font-size:.6rem;font-weight:500;letter-spacing:1px;
+  padding:4px 9px;border-radius:4px;cursor:none;transition:.2s;
+}
+.lb.on{background:var(--acc);color:var(--c0)}
+.lb:hover:not(.on){color:var(--b0)}
+
+.burger{
+  display:none;background:rgba(240,232,213,.06);
+  border:1px solid rgba(200,130,10,.2);color:rgba(240,232,213,.6);
+  width:36px;height:36px;border-radius:6px;
+  font-size:1rem;cursor:none;align-items:center;justify-content:center;transition:.2s;
+}
+.burger:hover{border-color:var(--acc);color:var(--b0)}
+
+/* Drawer */
+.drawer{
+  position:fixed;top:var(--nav-h);left:0;right:0;z-index:490;
+  background:rgba(15,6,0,.99);backdrop-filter:blur(20px);
+  border-bottom:1px solid rgba(200,130,10,.18);
+  box-shadow:0 8px 30px rgba(0,0,0,.7);
+  display:flex;flex-direction:column;gap:2px;padding:10px 16px 16px;
+  transform:translateY(-110%);transition:transform .3s cubic-bezier(.4,0,.2,1);
+}
+.drawer.open{transform:translateY(0)}
+.drawer .nl{font-size:.9rem;padding:12px 16px;border-radius:8px;color:rgba(240,232,213,.55)}
+
+/* ─────────────── VIEWS ─────────────── */
+.view{display:none;min-height:100vh;padding-top:var(--nav-h);flex-direction:column;position:relative;z-index:1}
+.view.active{display:flex}
+
+/* ══════════════════════════════════════════
+   BENTO GRID
+   Left  cols 1-3: hero + 4 sections + cases
+   Right cols 4-5: photo + contact
+══════════════════════════════════════════ */
+.bento{
+  flex:1;
+  display:grid;
+  gap:var(--gap);
+  padding:var(--gap) var(--pad) var(--gap);
+  /* 4 cols: sections left (1-2), photo right (3-4) */
+  grid-template-columns:1fr 1fr 1fr 1.3fr;
+  grid-template-rows:1fr 1fr 1fr;
+  min-height:calc(100vh - var(--nav-h));
+  max-width:var(--W);width:100%;margin:0 auto;
+}
+
+/* ── Positions (no hero cell) ── */
+.c-about {grid-column:1; grid-row:1}
+.c-tech  {grid-column:2; grid-row:1}
+.c-anal  {grid-column:1; grid-row:2}
+.c-dig   {grid-column:2; grid-row:2}
+.c-cases {grid-column:1/3;grid-row:3}     /* wide bottom left */
+.c-photo {grid-column:3/5;grid-row:1/3}   /* RIGHT tall — holds name+photo */
+.c-cont  {grid-column:3/5;grid-row:3}     /* RIGHT bottom */
+
+/* ── Card base ── */
+.cell{
+  border-radius:var(--r);
+  border:1px solid rgba(180,156,120,.32);
+  overflow:hidden;
+  display:flex;flex-direction:column;
+  position:relative;cursor:none;
+  transition:transform .4s cubic-bezier(.34,1.5,.64,1),
+             box-shadow .35s,border-color .3s;
+}
+.cell:hover{
+  transform:scale(1.028) translateY(-4px);
+  z-index:10;
+}
+
+/* ── Hero card — dark chocolate ── */
+.c-hero{
+  background:linear-gradient(160deg,var(--c1) 0%,var(--c0) 100%);
+  border-color:rgba(200,130,10,.25);
+}
+.c-hero:hover{
+  box-shadow:0 20px 56px rgba(30,14,4,.5),
+             0 0 0 1px rgba(200,130,10,.35);
+  border-color:rgba(200,130,10,.5);
+}
+
+/* hero inner glow */
+.c-hero::after{
+  content:'';position:absolute;
+  top:-80px;right:-80px;width:280px;height:280px;border-radius:50%;
+  background:radial-gradient(circle,rgba(200,130,10,.22),transparent 70%);
+  pointer-events:none;
+}
+
+/* ═══ SECTION CARDS — gradients + animated backgrounds ═══ */
+
+/* About — warm amber gradient */
+.c-about{
+  background:linear-gradient(145deg,#2a1208 0%,#3d1e08 40%,#4a2a10 100%);
+  border-color:rgba(200,130,10,.2);
+  box-shadow:0 2px 16px rgba(0,0,0,.45);
+}
+.c-about:hover{
+  box-shadow:0 18px 52px rgba(200,130,10,.2),0 0 0 1px rgba(200,130,10,.3);
+  border-color:rgba(200,130,10,.45);
+  background:linear-gradient(145deg,#321408 0%,#4a2408 40%,#5c3214 100%);
+}
+
+/* Technical — deeper cooler brown */
+.c-tech{
+  background:linear-gradient(145deg,#1e1008 0%,#2e1a0c 40%,#3d2210 100%);
+  border-color:rgba(140,92,50,.25);
+  box-shadow:0 2px 16px rgba(0,0,0,.45);
+}
+.c-tech:hover{
+  box-shadow:0 18px 52px rgba(140,92,50,.22),0 0 0 1px rgba(180,120,50,.35);
+  border-color:rgba(180,120,60,.5);
+  background:linear-gradient(145deg,#281408 0%,#3a2010 40%,#4e2c14 100%);
+}
+
+/* Analytical — cooler tones, subtle blue-brown */
+.c-anal{
+  background:linear-gradient(145deg,#180e08 0%,#281808 40%,#362010 100%);
+  border-color:rgba(160,100,40,.2);
+  box-shadow:0 2px 16px rgba(0,0,0,.45);
+}
+.c-anal:hover{
+  box-shadow:0 18px 52px rgba(160,100,40,.2),0 0 0 1px rgba(200,130,10,.3);
+  border-color:rgba(200,130,10,.4);
+  background:linear-gradient(145deg,#201208 0%,#321c0a 40%,#42260e 100%);
+}
+
+/* Digital — slightly purple-brown */
+.c-dig{
+  background:linear-gradient(145deg,#1a0e0a 0%,#2a180e 40%,#382010 100%);
+  border-color:rgba(140,80,50,.2);
+  box-shadow:0 2px 16px rgba(0,0,0,.45);
+}
+.c-dig:hover{
+  box-shadow:0 18px 52px rgba(180,100,50,.18),0 0 0 1px rgba(200,130,10,.28);
+  border-color:rgba(200,120,50,.45);
+  background:linear-gradient(145deg,#221210 0%,#341c10 40%,#462614 100%);
+}
+
+/* Cases — wide, richer gradient */
+.c-cases{
+  background:linear-gradient(120deg,#2a1408 0%,#3d1e08 35%,#4a2c10 70%,#3a1e08 100%);
+  border-color:rgba(200,130,10,.18);
+  box-shadow:0 2px 16px rgba(0,0,0,.4);
+}
+.c-cases:hover{
+  box-shadow:0 18px 52px rgba(200,130,10,.22),0 0 0 1px rgba(200,130,10,.35);
+  border-color:rgba(200,130,10,.5);
+  background:linear-gradient(120deg,#341808 0%,#4e2608 35%,#5c3814 70%,#4a2808 100%);
+}
+
+/* ── SVG SCENE inside each card (revealed on hover) ── */
+.card-scene{
+  position:absolute;
+  bottom:0;right:0;
+  width:75%;height:70%;
+  opacity:0;
+  transition:opacity .45s ease, transform .45s ease;
+  transform:translateY(10px) scale(.96);
+  pointer-events:none;
+  z-index:1;
+}
+.cell:hover .card-scene{opacity:1;transform:translateY(0) scale(1)}
+
+/* Gradient glow pulse on hover */
+.cell::after{
+  content:'';position:absolute;
+  bottom:-40px;right:-40px;
+  width:180px;height:180px;border-radius:50%;
+  background:radial-gradient(circle,var(--gc,rgba(200,130,10,.18)),transparent 70%);
+  opacity:0;transition:opacity .4s,transform .5s;
+  pointer-events:none;z-index:0;
+}
+.cell:hover::after{opacity:1;transform:scale(1.3)}
+.c-about{--gc:rgba(200,130,10,.22)}
+.c-tech {--gc:rgba(160,100,50,.25)}
+.c-anal {--gc:rgba(180,120,60,.2)}
+.c-dig  {--gc:rgba(140,80,50,.22)}
+.c-cases{--gc:rgba(200,130,10,.2)}
+
+/* ── Top accent glow line ── */
+.c-about::before,.c-tech::before,.c-anal::before,.c-dig::before,.c-cases::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  border-radius:var(--r) var(--r) 0 0;
+  opacity:0;transition:opacity .35s;
+}
+.c-about::before{background:linear-gradient(90deg,var(--acc),transparent 70%)}
+.c-tech::before {background:linear-gradient(90deg,#b06030,transparent 70%)}
+.c-anal::before {background:linear-gradient(90deg,var(--acc2),transparent 70%)}
+.c-dig::before  {background:linear-gradient(90deg,#a07840,transparent 70%)}
+.c-cases::before{background:linear-gradient(90deg,var(--acc),var(--acc2),transparent 70%)}
+.cell:hover::before{opacity:1}
+
+/* ── Number badge float animation ── */
+@keyframes floatUp{
+  0%{transform:translateY(0)}50%{transform:translateY(-4px)}100%{transform:translateY(0)}
+}
+.cell:hover .sc-n{animation:floatUp 2s ease-in-out infinite;color:var(--acc)}
+
+/* ── Icon pop animation ── */
+@keyframes iconPop{
+  0%{transform:scale(1)}40%{transform:scale(1.22)}70%{transform:scale(.96)}100%{transform:scale(1.08)}
+}
+.cell:hover .sc-ico{animation:iconPop .5s cubic-bezier(.34,1.56,.64,1) forwards}
+
+/* ── Shimmer sweep ── */
+.cell::before{
+  content:'';position:absolute;
+  top:0;left:-100%;width:45%;height:100%;
+  background:linear-gradient(110deg,transparent,rgba(255,255,255,.04),transparent);
+  transition:left .6s ease;
+  z-index:1;pointer-events:none;
+}
+.cell:hover::before{left:160%}
+
+/* ── Photo — deep frame ── */
+.c-photo{
+  background:var(--c0);
+  border-color:rgba(180,156,120,.25);
+  box-shadow:0 4px 24px rgba(30,14,4,.2);
+}
+.c-photo:hover{
+  box-shadow:0 20px 60px rgba(30,14,4,.45);
+  border-color:rgba(180,156,120,.5);
+}
+.c-photo img{
+  width:100%;height:100%;
+  object-fit:cover;object-position:center top;
+  display:block;
+  filter:contrast(1.04) brightness(.94) saturate(.88);
+  mask-image:none;
+  -webkit-mask-image:none;
+  transition:transform .5s ease, filter .35s;
+}
+.c-photo:hover img{transform:scale(1.04);filter:contrast(1.06) brightness(.98) saturate(.95)}
+
+/* ── Photo overlay — bottom panel with all info ── */
+.photo-overlay{
+  position:absolute;bottom:0;left:0;right:0;
+  padding:clamp(16px,2.5vw,26px);
+  z-index:3;
+  background:linear-gradient(to top,rgba(10,4,0,.92) 0%,rgba(10,4,0,.6) 60%,transparent 100%);
+  display:flex;flex-direction:column;justify-content:flex-end;
+}
+.po-tag{
+  display:inline-flex;align-items:center;gap:6px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:.58rem;color:var(--acc);letter-spacing:2px;text-transform:uppercase;
+  margin-bottom:10px;
+}
+.po-dot{width:5px;height:5px;border-radius:50%;background:var(--acc);box-shadow:0 0 7px var(--acc);animation:dp 2s infinite}
+.po-name{
+  font-family:'Cormorant Garamond',serif;font-weight:700;
+  font-size:clamp(1.8rem,3.2vw,3rem);line-height:1;
+  color:var(--b0);margin-bottom:4px;
+  animation:slideUp .8s cubic-bezier(.16,1,.3,1) both;
+}
+.po-sub{
+  font-family:'Cormorant Garamond',serif;font-weight:300;font-style:italic;
+  font-size:clamp(1rem,1.6vw,1.4rem);color:var(--acc);
+  margin-bottom:14px;
+  animation:slideUp .8s cubic-bezier(.16,1,.3,1) .1s both;
+}
+.po-loc{font-size:.72rem;color:rgba(240,232,213,.5);margin-bottom:16px;letter-spacing:.5px}
+.po-btns{display:flex;gap:8px;flex-wrap:wrap}
+
+
+
+/* photo-badge replaced by photo-overlay */
+@keyframes dp{0%,100%{opacity:1}50%{opacity:.2}}
+
+/* ── Contact — darkest ── */
+.c-cont{
+  background:var(--c1);
+  border-color:rgba(200,130,10,.2);
+  box-shadow:0 2px 14px rgba(30,14,4,.2);
+}
+.c-cont:hover{
+  box-shadow:0 16px 48px rgba(30,14,4,.5);
+  border-color:rgba(200,130,10,.4);
+}
+
+/* ── HERO content ── */
+.hero-inner{
+  padding:clamp(18px,2.5vw,30px);
+  display:flex;flex-direction:column;
+  height:100%;justify-content:flex-end;
+  position:relative;z-index:2;
+}
+.hero-wm{
+  position:absolute;bottom:-12px;right:-6px;
+  font-family:'Cormorant Garamond',serif;font-weight:700;
+  font-size:clamp(72px,9vw,140px);
+  color:transparent;
+  -webkit-text-stroke:1.5px rgba(200,130,10,.12);
+  line-height:1;user-select:none;pointer-events:none;
+  white-space:nowrap;
+}
+.hero-tag{
+  display:inline-flex;align-items:center;gap:7px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:clamp(.56rem,.68vw,.68rem);
+  color:var(--acc);letter-spacing:2px;text-transform:uppercase;
+  background:rgba(200,130,10,.1);
+  border:1px solid rgba(200,130,10,.25);
+  padding:5px 12px;border-radius:20px;width:fit-content;
+  margin-bottom:clamp(12px,2vh,20px);
+}
+.dp2{width:5px;height:5px;border-radius:50%;background:var(--acc);box-shadow:0 0 7px var(--acc);animation:dp 2s infinite}
+
+.hero-name{
+  font-family:'Cormorant Garamond',serif;font-weight:700;
+  line-height:.9;margin-bottom:clamp(16px,2.5vh,26px);
+}
+.hn1{
+  display:block;font-size:clamp(2.4rem,4.8vw,5.2rem);
+  color:var(--b0);
+  animation:slideUp .8s cubic-bezier(.16,1,.3,1) both;
+}
+.hn2{
+  display:block;font-size:clamp(1.5rem,3vw,3.2rem);
+  font-style:italic;font-weight:300;
+  color:var(--acc);
+  animation:slideUp .8s cubic-bezier(.16,1,.3,1) .12s both;
+}
+@keyframes slideUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+
+.hero-btns{display:flex;gap:10px;flex-wrap:wrap}
+.btn-a{
+  background:var(--acc);color:var(--c0);
+  border:none;font-family:'Inter',sans-serif;
+  font-size:.8rem;font-weight:700;
+  padding:10px 24px;border-radius:8px;cursor:none;transition:.25s;
+  box-shadow:0 4px 20px rgba(200,130,10,.35);
+}
+.btn-a:hover{background:#d99010;transform:translateY(-2px);box-shadow:0 8px 28px rgba(200,130,10,.5)}
+.btn-b{
+  background:rgba(240,232,213,.1);border:1px solid rgba(240,232,213,.2);
+  color:var(--b1);font-family:'Inter',sans-serif;
+  font-size:.8rem;font-weight:400;
+  padding:10px 20px;border-radius:8px;cursor:none;transition:.25s;
+}
+.btn-b:hover{background:rgba(240,232,213,.18);border-color:rgba(240,232,213,.4)}
+
+/* ── Section cell content ── */
+.sc-pad{
+  padding:clamp(16px,2vw,24px);
+  display:flex;flex-direction:column;height:100%;
+  position:relative;z-index:2;
+}
+.sc-n{
+  font-family:'JetBrains Mono',monospace;
+  font-size:.55rem;letter-spacing:3px;color:rgba(200,130,10,.55);
+  margin-bottom:auto;
+}
+.sc-ico{font-size:clamp(1.6rem,2vw,2.2rem);margin:clamp(8px,1.5vh,14px) 0 clamp(6px,1vh,10px)}
+.sc-ttl{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(1rem,1.4vw,1.45rem);font-weight:700;line-height:1.2;
+  color:var(--b0);margin-bottom:5px;
+}
+.sc-dsc{
+  font-size:clamp(.68rem,.78vw,.8rem);line-height:1.6;
+  color:rgba(240,232,213,.45);flex:1;
+}
+.sc-cta{
+  display:inline-flex;align-items:center;gap:5px;
+  margin-top:clamp(10px,1.5vh,16px);
+  font-family:'JetBrains Mono',monospace;
+  font-size:.62rem;letter-spacing:1.5px;color:var(--acc2);
+  opacity:0;transform:translateX(-6px);transition:.25s;
+}
+.cell:hover .sc-cta{opacity:1;transform:translateX(0)}
+
+/* Cases — dark card, light text */
+.c-cases .sc-n,.c-cases .sc-dsc{color:rgba(240,232,213,.45)}
+.c-cases .sc-ttl{color:var(--b0)}
+.c-cases .sc-cta{color:var(--acc)}
+
+/* Cases wide layout */
+.c-cases .sc-pad{
+  flex-direction:row;align-items:center;
+  gap:clamp(14px,2.5vw,30px);
+}
+.c-cases .sc-ico{margin:0;flex-shrink:0}
+.c-cases .sc-info{flex:1;display:flex;flex-direction:column;gap:4px}
+
+/* Contact content */
+.cont-inner{
+  padding:clamp(16px,2vw,24px);
+  display:flex;flex-direction:column;height:100%;justify-content:space-between;
+}
+.cont-inner .sc-n{color:rgba(200,130,10,.5)}
+.cont-inner .sc-ico{margin-top:6px}
+.cont-inner .sc-ttl{color:var(--b1);font-size:clamp(.95rem,1.3vw,1.35rem)}
+.clinks{display:flex;flex-direction:column;gap:clamp(7px,1.2vh,12px);margin-top:8px}
+.cl{
+  display:flex;align-items:center;gap:8px;
+  text-decoration:none;
+  font-size:clamp(.72rem,.85vw,.84rem);
+  color:rgba(240,232,213,.5);transition:color .2s;
+}
+.cl:hover{color:var(--b0)}
+.cl-ic{font-size:.9rem;width:18px;text-align:center}
+
+/* ═══════════════════════════════════
+   SECTION PAGES
+═══════════════════════════════════ */
+.sv-hd{
+  background:rgba(15,6,0,.97);backdrop-filter:blur(18px);
+  border-bottom:1px solid rgba(200,130,10,.18);
+  box-shadow:0 2px 20px rgba(0,0,0,.6);
+  position:sticky;top:var(--nav-h);z-index:200;
+}
+.sv-hd .w{
+  max-width:var(--W);margin:0 auto;padding:0 var(--pad);
+  display:flex;align-items:center;gap:14px;
+  padding-top:clamp(16px,2.5vh,26px);
+  padding-bottom:clamp(12px,2vh,20px);
+}
+.back{
+  display:flex;align-items:center;gap:5px;
+  background:rgba(240,232,213,.06);
+  border:1px solid rgba(200,130,10,.2);
+  color:rgba(240,232,213,.6);
+  font-family:'Inter',sans-serif;font-size:.75rem;font-weight:500;
+  padding:7px 14px;border-radius:6px;cursor:none;transition:.2s;flex-shrink:0;
+}
+.back:hover{background:rgba(200,130,10,.1);border-color:var(--acc);color:var(--b0)}
+.sv-eye{font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--acc);letter-spacing:3px;text-transform:uppercase;margin-bottom:4px}
+.sv-ttl{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:clamp(1.5rem,3vw,2.4rem);color:var(--b0)}
+
+.sv-body{flex:1;padding:clamp(22px,4vh,48px) 0}
+.sv-body .w{max-width:var(--W);margin:0 auto;padding:0 var(--pad)}
+
+/* Subgrid */
+.sub-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(min(100%,220px),1fr));
+  gap:clamp(10px,1.5vw,16px);
+}
+
+/* Subcard — beige with chocolate hover */
+.subcard{
+  background:var(--c1);
+  border:1px solid rgba(200,130,10,.15);
+  border-radius:12px;padding:clamp(18px,2vw,24px);
+  cursor:none;
+  box-shadow:0 2px 10px rgba(0,0,0,.2);
+  transition:transform .32s cubic-bezier(.34,1.5,.64,1),
+             border-color .25s,box-shadow .3s;
+  display:flex;flex-direction:column;gap:8px;
+  position:relative;overflow:hidden;
+}
+/* Shine effect */
+.subcard::before{
+  content:'';position:absolute;
+  top:0;left:-100%;width:60%;height:100%;
+  background:linear-gradient(120deg,transparent,rgba(255,255,255,.25),transparent);
+  transition:left .5s ease;
+}
+.subcard:hover::before{left:150%}
+.subcard:hover{
+  transform:translateY(-5px) scale(1.015);
+  border-color:rgba(200,130,10,.4);
+  box-shadow:0 12px 36px rgba(0,0,0,.35);
+}
+
+/* Bottom accent bar on hover */
+.subcard::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--acc),var(--c3));
+  transform:scaleX(0);transform-origin:left;transition:transform .35s;
+}
+.subcard:hover::after{transform:scaleX(1)}
+
+.si{font-size:1.5rem}
+.subcard h4{font-family:'Cormorant Garamond',serif;font-size:clamp(.95rem,1.2vw,1.1rem);font-weight:700;color:var(--b0)}
+.subcard p{font-size:clamp(.7rem,.85vw,.82rem);color:rgba(240,232,213,.45);line-height:1.6;flex:1}
+.so{
+  font-family:'JetBrains Mono',monospace;font-size:.6rem;
+  letter-spacing:1px;color:var(--acc);
+  opacity:0;transition:.2s;
+}
+.subcard:hover .so{opacity:1}
+
+/* Detail */
+.det-body{flex:1;padding:clamp(22px,4vh,48px) 0}
+.det-body .w{max-width:var(--W);margin:0 auto;padding:0 var(--pad);display:flex;flex-direction:column;gap:clamp(14px,2vh,20px)}
+.det-box{
+  background:var(--c1);
+  border:1px solid rgba(200,130,10,.12);
+  border-radius:12px;padding:clamp(20px,2.5vw,32px);
+  box-shadow:0 2px 10px rgba(0,0,0,.2);
+}
+.det-txt{font-size:clamp(.88rem,1vw,.96rem);line-height:1.9;color:rgba(240,232,213,.65);white-space:pre-wrap;outline:none}
+.det-txt[contenteditable="true"]{border:1.5px dashed rgba(200,130,10,.3);border-radius:6px;padding:10px}
+.det-lbl{font-family:'JetBrains Mono',monospace;font-size:.58rem;letter-spacing:3px;text-transform:uppercase;color:var(--acc2);margin-bottom:14px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{
+  background:rgba(240,232,213,.07);border:1px solid rgba(200,130,10,.2);
+  color:rgba(240,232,213,.6);font-size:.72rem;padding:5px 13px;border-radius:20px;
+}
+.mosaic{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,185px),1fr));gap:clamp(8px,1.5vw,12px)}
+.ps{
+  aspect-ratio:4/3;background:rgba(240,232,213,.02);
+  border:2px dashed rgba(200,130,10,.18);border-radius:10px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:6px;cursor:none;transition:.2s;position:relative;overflow:hidden;
+}
+.ps:hover{border-color:var(--acc);background:rgba(200,130,10,.07)}
+.ps img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:8px;display:none}
+.ps.has img{display:block}.ps.has .ps-ph{display:none}
+.ps-ph{display:none}
+
+/* Page footer */
+.pg-foot{
+  border-top:1px solid rgba(200,130,10,.15);
+  padding:clamp(14px,2.5vh,22px) 0 clamp(18px,3vh,28px);
+  background:rgba(0,0,0,.25);
+}
+.pg-foot .w{max-width:var(--W);margin:0 auto;padding:0 var(--pad);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.pf-lbl{font-family:'JetBrains Mono',monospace;font-size:.56rem;color:rgba(200,130,10,.55);letter-spacing:3px;text-transform:uppercase}
+.pf-links{display:flex;gap:clamp(10px,2vw,22px);flex-wrap:wrap}
+.pf-a{display:flex;align-items:center;gap:6px;text-decoration:none;color:rgba(240,232,213,.45);font-size:clamp(.74rem,.9vw,.86rem);transition:.2s}
+.pf-a:hover{color:var(--b0)}
+
+/* Edit FAB */
+.efab{
+  position:fixed;bottom:clamp(14px,2.5vh,22px);right:clamp(14px,2.5vw,22px);z-index:600;
+  background:rgba(15,6,0,.95);
+  border:1.5px solid rgba(200,130,10,.3);
+  color:rgba(240,232,213,.65);font-family:'JetBrains Mono',monospace;
+  font-size:.62rem;font-weight:500;letter-spacing:.5px;
+  padding:9px 16px;border-radius:8px;cursor:none;
+  box-shadow:0 4px 20px rgba(74,44,16,.14);
+  transition:.2s;display:flex;align-items:center;gap:6px;
+}
+.efab:hover{background:rgba(200,130,10,.12);border-color:var(--acc);color:var(--b0)}
+.efab.on{border-color:var(--acc);color:var(--acc)}
+
+/* Fade */
+.fu{opacity:0;transform:translateY(16px);transition:opacity .5s,transform .5s}
+.fu.in{opacity:1;transform:none}
+
+/* ═══════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════ */
+@media(max-width:1200px){
+  .bento{
+    grid-template-columns:1fr 1fr 1.2fr;
+    grid-template-rows:1fr 1fr 1fr;
+  }
+  .c-about{grid-column:1; grid-row:1}
+  .c-tech {grid-column:2; grid-row:1}
+  .c-anal {grid-column:1; grid-row:2}
+  .c-dig  {grid-column:2; grid-row:2}
+  .c-cases{grid-column:1/3;grid-row:3}
+  .c-photo{grid-column:3; grid-row:1/3}
+  .c-cont {grid-column:3; grid-row:3}
+}
+@media(max-width:900px){
+  .nav-links{display:none}.burger{display:flex}
+  .bento{
+    grid-template-columns:1fr 1fr 1.1fr;
+    grid-template-rows:auto;
+  }
+  .c-about{grid-column:1; grid-row:1}
+  .c-tech {grid-column:2; grid-row:1}
+  .c-anal {grid-column:1; grid-row:2}
+  .c-dig  {grid-column:2; grid-row:2}
+  .c-cases{grid-column:1/3;grid-row:3}
+  .c-photo{grid-column:3; grid-row:1/3}
+  .c-cont {grid-column:3; grid-row:3/5}
+  .sv-hd{position:relative;top:0}
+}
+@media(max-width:640px){
+  .bento{grid-template-columns:1fr 1fr;gap:8px}
+  .c-photo{grid-column:1/3;grid-row:1;height:260px}
+  .c-about{grid-column:1;  grid-row:2}
+  .c-tech {grid-column:2;  grid-row:2}
+  .c-anal {grid-column:1;  grid-row:3}
+  .c-dig  {grid-column:2;  grid-row:3}
+  .c-cases{grid-column:1/3;grid-row:4}
+  .c-cont {grid-column:1/3;grid-row:5}
+  .c-cases .sc-pad{flex-direction:column;align-items:flex-start}
+  .sub-grid{grid-template-columns:1fr}
+  .mosaic{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:400px){
+  :root{--pad:14px}
+  .bento{grid-template-columns:1fr}
+  .c-photo,.c-about,.c-tech,.c-anal,.c-dig,.c-cases,.c-cont{grid-column:1;grid-row:auto}
+  .c-photo{height:220px}
+  .mosaic{grid-template-columns:1fr}
+}
+
+/* ═══ GLOBAL ANIMATIONS ═══ */
+
+/* Entrance animation for bento */
+@keyframes bentoIn{from{opacity:0;transform:translateY(24px) scale(.98)}to{opacity:1;transform:none}}
+.bento{animation:bentoIn .7s cubic-bezier(.16,1,.3,1) .1s both}
+
+/* Card stagger */
+.c-about{animation:bentoIn .6s cubic-bezier(.16,1,.3,1) .15s both}
+.c-tech {animation:bentoIn .6s cubic-bezier(.16,1,.3,1) .2s both}
+.c-anal {animation:bentoIn .6s cubic-bezier(.16,1,.3,1) .25s both}
+.c-dig  {animation:bentoIn .6s cubic-bezier(.16,1,.3,1) .3s both}
+.c-cases{animation:bentoIn .6s cubic-bezier(.16,1,.3,1) .35s both}
+.c-photo{animation:bentoIn .6s cubic-bezier(.16,1,.3,1) .1s both}
+.c-cont {animation:bentoIn .6s cubic-bezier(.16,1,.3,1) .4s both}
+
+/* Ambient noise pattern on page */
+body::after{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse at 20% 50%,rgba(200,130,10,.04) 0%,transparent 50%),
+    radial-gradient(ellipse at 80% 20%,rgba(160,80,30,.05) 0%,transparent 40%),
+    radial-gradient(ellipse at 60% 80%,rgba(100,50,20,.06) 0%,transparent 45%);
+  animation:ambientShift 12s ease-in-out infinite alternate;
+}
+@keyframes ambientShift{
+  0%{opacity:.6}50%{opacity:1}100%{opacity:.7}
+}
+
+/* sc-ttl shimmer on hover */
+@keyframes textGlow{
+  0%,100%{text-shadow:none}
+  50%{text-shadow:0 0 20px rgba(200,130,10,.3)}
+}
+.cell:hover .sc-ttl{animation:textGlow 2s ease-in-out infinite}
+
+/* CTA arrow bounce */
+@keyframes arrowBounce{
+  0%,100%{transform:translateX(0)}50%{transform:translateX(5px)}
+}
+.cell:hover .sc-cta{animation:arrowBounce 1s ease-in-out infinite}
+
+
+/* ═══ INFO CARDS (about subcards — no click, just info) ═══ */
+.info-card {
+  background: linear-gradient(145deg,#2a1408 0%,#3a1e0a 100%);
+  border: 1px solid rgba(200,130,10,.18);
+  border-radius: 14px;
+  padding: clamp(20px,2.5vw,30px);
+  position: relative; overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0,0,0,.35);
+  animation: bentoIn .6s cubic-bezier(.16,1,.3,1) both;
+}
+.info-card::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:2px;
+  background: linear-gradient(90deg,var(--acc),transparent 70%);
+  border-radius: 14px 14px 0 0;
+}
+.info-card + .info-card { margin-top: 0 }
+
+.ic-head {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 18px;
+}
+.ic-ico {
+  font-size: 1.6rem;
+  width: 46px; height: 46px;
+  background: rgba(200,130,10,.1);
+  border: 1px solid rgba(200,130,10,.2);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.ic-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1.1rem,1.6vw,1.4rem); font-weight: 700;
+  color: var(--b0);
+}
+.ic-sub {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .58rem; color: var(--acc); letter-spacing: 2px;
+  text-transform: uppercase; margin-top: 2px;
+}
+.ic-body {
+  font-size: clamp(.82rem,.95vw,.92rem);
+  line-height: 1.85; color: rgba(240,232,213,.62);
+}
+.ic-body p { margin-bottom: 12px }
+.ic-body p:last-child { margin-bottom: 0 }
+
+.ic-list {
+  list-style: none; padding: 0; margin: 10px 0 14px;
+  display: flex; flex-direction: column; gap: 7px;
+}
+.ic-list li {
+  display: flex; align-items: flex-start; gap: 10px;
+  font-size: clamp(.8rem,.92vw,.9rem);
+  color: rgba(240,232,213,.6); line-height: 1.55;
+}
+.ic-list li::before {
+  content: '—'; color: var(--acc); flex-shrink: 0;
+  font-weight: 700; margin-top: 1px;
+}
+
+.ic-tags {
+  display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px;
+}
+.ic-tag {
+  background: rgba(200,130,10,.1);
+  border: 1px solid rgba(200,130,10,.22);
+  color: rgba(240,232,213,.7);
+  font-size: .7rem; padding: 5px 13px; border-radius: 20px;
+  font-family: 'JetBrains Mono', monospace; letter-spacing: .5px;
+}
+
+.ic-lang-row {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 0; border-bottom: 1px solid rgba(200,130,10,.1);
+}
+.ic-lang-row:last-child { border-bottom: none }
+.ic-flag { font-size: 1.2rem; flex-shrink: 0 }
+.ic-lang-name { font-size: .88rem; color: var(--b0); font-weight: 600; flex:1 }
+.ic-lang-level {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .62rem; color: var(--acc); letter-spacing: 1px;
+  background: rgba(200,130,10,.1); border: 1px solid rgba(200,130,10,.2);
+  padding: 3px 10px; border-radius: 10px;
+}
+.ic-strength-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 0; border-bottom: 1px solid rgba(200,130,10,.08);
+}
+.ic-strength-row:last-child { border-bottom: none }
+.ic-str-ico { font-size: 1rem; flex-shrink:0 }
+.ic-str-txt { font-size: .86rem; color: rgba(240,232,213,.65); line-height:1.4 }
+
+/* Grid for about subcards */
+.about-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
+  gap: clamp(12px,1.8vw,18px);
+}
+
+
+
+/* ── Photo placeholder (template) ── */
+.ps-placeholder{
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+  pointer-events:none;
+}
+.ps-ph-lbl{
+  font-family:'JetBrains Mono',monospace;
+  font-size:.62rem;color:rgba(200,130,10,.5);letter-spacing:1px;
+}
+.ps-ph-hint{
+  font-size:.58rem;color:rgba(240,232,213,.2);letter-spacing:.5px;
+}
+</style>
+</head>
+<body>
+<div id="cur"></div><div id="cur2"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-in">
+    <div class="logo"><em>Ali</em> Shukiurov</div>
+    <div class="nav-links">
+      <button class="nl" onclick="go('about')"      data-t="b1">Обо мне</button>
+      <button class="nl" onclick="go('technical')"  data-t="b2">Technical</button>
+      <button class="nl" onclick="go('analytical')" data-t="b3">Analytical</button>
+      <button class="nl" onclick="go('digital')"    data-t="b4">Digital / IT</button>
+      <button class="nl" onclick="go('cases')"      data-t="b5">Cases</button>
+    </div>
+    <div class="nav-r">
+      <div class="lbox">
+        <button class="lb on" onclick="setLang('en')">EN</button>
+        <button class="lb"    onclick="setLang('nl')">NL</button>
+        <button class="lb"    onclick="setLang('ru')">RU</button>
+      </div>
+      <button class="burger" id="burgerBtn" onclick="toggleDrawer()">☰</button>
+    </div>
+  </div>
+</nav>
+
+<div class="drawer" id="drawer">
+  <button class="nl" onclick="go('about')"      data-t="b1">Обо мне</button>
+  <button class="nl" onclick="go('technical')"  data-t="b2">Technical</button>
+  <button class="nl" onclick="go('analytical')" data-t="b3">Analytical</button>
+  <button class="nl" onclick="go('digital')"    data-t="b4">Digital / IT</button>
+  <button class="nl" onclick="go('cases')"      data-t="b5">Cases</button>
+</div>
+
+<!-- ════════════ HOME ════════════ -->
+<div id="view-home" class="view active">
+<div class="bento">
+
+  <!-- ABOUT — col 1 top (hero removed) -->
+  <div class="cell c-about" onclick="go('about')">
+
+    <!-- Scene: person silhouette -->
+    <svg class="card-scene" viewBox="0 0 200 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="140" cy="45" r="28" fill="rgba(200,130,10,.12)" stroke="rgba(200,130,10,.2)" stroke-width="1.5"/>
+      <circle cx="140" cy="38" r="14" fill="rgba(200,130,10,.15)"/>
+      <path d="M110 130 Q110 95 140 95 Q170 95 170 130" fill="rgba(200,130,10,.12)" stroke="rgba(200,130,10,.18)" stroke-width="1.5"/>
+      <line x1="60" y1="55" x2="100" y2="55" stroke="rgba(200,130,10,.2)" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="60" y1="70" x2="95" y2="70" stroke="rgba(200,130,10,.15)" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="60" y1="85" x2="90" y2="85" stroke="rgba(200,130,10,.1)" stroke-width="1.5" stroke-linecap="round"/>
+      <circle cx="55" cy="120" r="18" fill="none" stroke="rgba(200,130,10,.1)" stroke-width="1" stroke-dasharray="3 3"/>
+      <circle cx="160" cy="135" r="12" fill="rgba(180,100,20,.06)" stroke="rgba(200,130,10,.12)" stroke-width="1"/>
+    </svg>
+    <div class="sc-pad">
+      <div class="sc-n">01</div>
+      <div class="sc-ico">👤</div>
+      <div class="sc-ttl" data-t="b1">About me</div>
+      <div class="sc-dsc" data-t="b1d">Who I am, values and languages</div>
+      <div class="sc-cta" data-t="openArr">Open →</div>
+    </div>
+  </div>
+
+  <!-- TECH — col 3 top -->
+  <div class="cell c-tech" onclick="go('technical')">
+
+    <!-- Scene: tools -->
+    <svg class="card-scene" viewBox="0 0 200 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M155 20 L175 40 L130 85 L110 65 Z" fill="rgba(180,110,40,.12)" stroke="rgba(200,130,10,.22)" stroke-width="1.5" stroke-linejoin="round"/>
+      <rect x="108" y="63" width="24" height="8" rx="2" transform="rotate(45 108 63)" fill="rgba(200,130,10,.18)"/>
+      <circle cx="165" cy="25" r="10" fill="rgba(200,130,10,.08)" stroke="rgba(200,130,10,.2)" stroke-width="1.5"/>
+      <path d="M60 110 L80 90 L95 105 L75 125 Z" fill="rgba(160,90,30,.1)" stroke="rgba(180,110,40,.2)" stroke-width="1.5"/>
+      <path d="M55 75 Q55 55 75 55 Q80 45 90 50 Q85 65 80 70 L70 80 Z" fill="rgba(200,130,10,.1)" stroke="rgba(200,130,10,.18)" stroke-width="1.2"/>
+      <circle cx="130" cy="120" r="20" fill="none" stroke="rgba(200,130,10,.1)" stroke-width="1" stroke-dasharray="4 4"/>
+      <circle cx="130" cy="120" r="8" fill="rgba(200,130,10,.08)"/>
+      <line x1="110" y1="120" x2="150" y2="120" stroke="rgba(200,130,10,.12)" stroke-width="1"/>
+      <line x1="130" y1="100" x2="130" y2="140" stroke="rgba(200,130,10,.12)" stroke-width="1"/>
+    </svg>
+    <div class="sc-pad">
+      <div class="sc-n">02</div>
+      <div class="sc-ico">🔧</div>
+      <div class="sc-ttl" data-t="b2">Technical</div>
+      <div class="sc-dsc" data-t="b2d">Cars, electrics, construction</div>
+      <div class="sc-cta" data-t="openArr">Open →</div>
+    </div>
+  </div>
+
+  <!-- ANAL — col 2 mid -->
+  <div class="cell c-anal" onclick="go('analytical')">
+
+    <!-- Scene: data chart -->
+    <svg class="card-scene" viewBox="0 0 200 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <line x1="55" y1="140" x2="185" y2="140" stroke="rgba(200,130,10,.18)" stroke-width="1.5"/>
+      <line x1="55" y1="30" x2="55" y2="140" stroke="rgba(200,130,10,.18)" stroke-width="1.5"/>
+      <rect x="70" y="100" width="18" height="40" rx="2" fill="rgba(200,130,10,.18)"/>
+      <rect x="95" y="75" width="18" height="65" rx="2" fill="rgba(200,130,10,.22)"/>
+      <rect x="120" y="55" width="18" height="85" rx="2" fill="rgba(200,130,10,.28)"/>
+      <rect x="145" y="85" width="18" height="55" rx="2" fill="rgba(200,130,10,.2)"/>
+      <polyline points="79,100 104,75 129,55 154,85" stroke="rgba(240,200,100,.5)" stroke-width="2" fill="none" stroke-linejoin="round"/>
+      <circle cx="79" cy="100" r="3" fill="rgba(240,200,100,.7)"/>
+      <circle cx="104" cy="75" r="3" fill="rgba(240,200,100,.7)"/>
+      <circle cx="129" cy="55" r="3" fill="rgba(240,200,100,.7)"/>
+      <circle cx="154" cy="85" r="3" fill="rgba(240,200,100,.7)"/>
+      <circle cx="170" cy="40" r="22" fill="none" stroke="rgba(200,130,10,.1)" stroke-width="1" stroke-dasharray="3 3"/>
+      <path d="M170 18 L170 40 L185 50" stroke="rgba(200,130,10,.2)" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+    <div class="sc-pad">
+      <div class="sc-n">03</div>
+      <div class="sc-ico">📊</div>
+      <div class="sc-ttl" data-t="b3">Analytical</div>
+      <div class="sc-dsc" data-t="b3d">Data, research & decisions</div>
+      <div class="sc-cta" data-t="openArr">Open →</div>
+    </div>
+  </div>
+
+  <!-- DIG — col 3 mid -->
+  <div class="cell c-dig" onclick="go('digital')">
+
+    <!-- Scene: laptop / code -->
+    <svg class="card-scene" viewBox="0 0 200 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="58" y="35" width="110" height="75" rx="6" fill="rgba(200,130,10,.08)" stroke="rgba(200,130,10,.2)" stroke-width="1.5"/>
+      <rect x="65" y="43" width="96" height="59" rx="3" fill="rgba(200,130,10,.06)"/>
+      <path d="M55 112 L173 112 L180 125 L48 125 Z" fill="rgba(200,130,10,.1)" stroke="rgba(200,130,10,.18)" stroke-width="1"/>
+      <!-- code lines -->
+      <rect x="72" y="52" width="30" height="3" rx="1.5" fill="rgba(200,130,10,.35)"/>
+      <rect x="72" y="60" width="55" height="3" rx="1.5" fill="rgba(200,130,10,.2)"/>
+      <rect x="72" y="68" width="42" height="3" rx="1.5" fill="rgba(200,130,10,.25)"/>
+      <rect x="80" y="76" width="60" height="3" rx="1.5" fill="rgba(200,130,10,.18)"/>
+      <rect x="80" y="84" width="35" height="3" rx="1.5" fill="rgba(200,130,10,.22)"/>
+      <rect x="72" y="92" width="48" height="3" rx="1.5" fill="rgba(200,130,10,.2)"/>
+      <!-- cursor blink -->
+      <rect x="122" y="84" width="2" height="10" rx="1" fill="rgba(240,180,60,.6)"/>
+    </svg>
+    <div class="sc-pad">
+      <div class="sc-n">04</div>
+      <div class="sc-ico">💻</div>
+      <div class="sc-ttl" data-t="b4">Digital / IT</div>
+      <div class="sc-dsc" data-t="b4d">Web, tools & automation</div>
+      <div class="sc-cta" data-t="openArr">Open →</div>
+    </div>
+  </div>
+
+  <!-- CASES — wide bottom left -->
+  <div class="cell c-cases" onclick="go('cases')">
+
+    <!-- Scene: globe world -->
+    <svg class="card-scene" viewBox="0 0 180 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="140" cy="70" r="50" fill="none" stroke="rgba(200,130,10,.18)" stroke-width="1.5"/>
+      <ellipse cx="140" cy="70" rx="25" ry="50" fill="none" stroke="rgba(200,130,10,.12)" stroke-width="1"/>
+      <ellipse cx="140" cy="70" rx="50" ry="18" fill="none" stroke="rgba(200,130,10,.12)" stroke-width="1"/>
+      <line x1="90" y1="70" x2="190" y2="70" stroke="rgba(200,130,10,.1)" stroke-width="1"/>
+      <line x1="140" y1="20" x2="140" y2="120" stroke="rgba(200,130,10,.1)" stroke-width="1"/>
+      <path d="M110 45 Q125 40 130 55 Q140 50 145 60 Q135 65 125 60 Z" fill="rgba(200,130,10,.18)"/>
+      <path d="M148 65 Q158 60 165 70 Q160 80 150 78 Q142 75 148 65 Z" fill="rgba(200,130,10,.14)"/>
+      <circle cx="60" cy="55" r="3" fill="rgba(200,130,10,.4)"/>
+      <line x1="63" y1="55" x2="108" y2="48" stroke="rgba(200,130,10,.2)" stroke-width="1" stroke-dasharray="3 2"/>
+    </svg>
+    <div class="sc-pad">
+      <div class="sc-ico" style="flex-shrink:0">🌍</div>
+      <div class="sc-info">
+        <div class="sc-n">05</div>
+        <div class="sc-ttl" data-t="b5">Real-world Cases</div>
+        <div class="sc-dsc" data-t="b5d">Concrete projects and real-life experiences</div>
+      </div>
+      <div class="sc-cta" data-t="openArr" style="opacity:1;transform:none;flex-shrink:0">Open →</div>
+    </div>
+  </div>
+
+  <!-- PHOTO — right tall, single clean overlay -->
+  <div class="cell c-photo">
+    <!--
+      Replace src with your photo path, e.g. src="photo.jpg"
+    -->
+    <img
+      src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=700&q=85"
+      alt="Ali Shukiurov"
+    >
+    <!-- Single clean bottom overlay -->
+    <div class="photo-overlay fu">
+      <div class="po-tag">
+        <span class="po-dot"></span>
+        <span data-t="status">Open to opportunities</span>
+      </div>
+      <div class="po-name">Ali Shukiurov</div>
+      <div class="po-sub" data-t="tagline">Multi-skilled specialist</div>
+      <div class="po-loc">📍 Overijssel, Netherlands</div>
+      <div class="po-btns">
+        <button class="btn-a" onclick="go('about')" data-t="heroBtn1">Explore →</button>
+        <button class="btn-b" onclick="scrollCont()" data-t="heroBtn2">Contact</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTACT — right bottom -->
+  <div class="cell c-cont" id="contCell">
+    <div class="cont-inner">
+      <div>
+        <div class="sc-n" style="color:rgba(200,130,10,.5)">06</div>
+        <div class="sc-ico" style="margin-top:6px">📬</div>
+        <div class="sc-ttl" style="color:var(--b1);font-family:'Cormorant Garamond',serif;font-size:clamp(.95rem,1.3vw,1.35rem);font-weight:700;margin-bottom:4px" data-t="b6">Contact</div>
+      </div>
+      <div class="clinks">
+        <a class="cl" href="tel:0613571645"><span class="cl-ic">📞</span><span>0613571645</span></a>
+        <a class="cl" href="mailto:clash84all@gmail.com"><span class="cl-ic">✉️</span><span>clash84all@gmail.com</span></a>
+        <a class="cl" href="https://t.me/ash7ll" target="_blank" rel="noopener"><span class="cl-ic">💬</span><span>t.me/ash7ll</span></a>
+        <a class="cl" href="https://www.linkedin.com/in/725198263/" target="_blank" rel="noopener"><span class="cl-ic">💼</span><span>LinkedIn</span></a>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /bento -->
+</div><!-- /home -->
+
+<!-- ════ ABOUT ════ -->
+<div id="view-about" class="view">
+  <div class="sv-hd"><div class="w"><button class="back" onclick="goHome()">← <span data-t="back">Back</span></button><div><div class="sv-eye">01</div><div class="sv-ttl" data-t="b1">Обо мне</div></div></div></div>
+  <div class="sv-body"><div class="w">
+    <div class="about-grid">
+
+      <!-- Обо мне — главный блок -->
+      <div class="info-card fu" style="grid-column:1/-1;transition-delay:.05s">
+        <div class="ic-head">
+          <div class="ic-ico">👤</div>
+          <div>
+            <div class="ic-title" data-t="ic_about_title">Обо мне</div>
+            <div class="ic-sub">Ali Shukiurov · Goor, Netherlands</div>
+          </div>
+        </div>
+        <div class="ic-body">
+          <p><span data-t="ab_p1">Меня зовут Али Шукюров. Я живу в Goor, Нидерланды.</span></p>
+          <p><span data-t="ab_p2">У меня аналитический склад ума и широкий практический опыт в технических, административных и цифровых задачах. Я умею быстро разбираться в новых системах, находить решения в нестандартных ситуациях и самостоятельно осваивать необходимые инструменты.</span></p>
+          <p><span data-t="ab_p3">Работал с различными видами задач:</span></p>
+          <ul class="ic-list">
+            <li><span data-t="ab_li1">административная работа и работа с цифровыми системами</span></li>
+            <li><span data-t="ab_li2">технические и ремонтные работы</span></li>
+            <li><span data-t="ab_li3">базовая работа с сайтами и IT-инструментами</span></li>
+            <li><span data-t="ab_li4">поиск и анализ информации</span></li>
+            <li><span data-t="ab_li5">решение организационных и практических вопросов</span></li>
+          </ul>
+          <p><span data-t="ab_p4">Сейчас я развиваюсь в направлении офисной, аналитической и IT-сферы, при этом открыт и к практической работе, где ценятся ответственность, сообразительность и умение решать задачи.</span></p>
+        </div>
+      </div>
+
+      <!-- Мой путь -->
+      <div class="info-card fu" style="transition-delay:.1s">
+        <div class="ic-head">
+          <div class="ic-ico">🌱</div>
+          <div>
+            <div class="ic-title" data-t="ic_journey_title">Мой путь</div>
+            <div class="ic-sub" data-t="ic_journey_sub">Background</div>
+          </div>
+        </div>
+        <div class="ic-body">
+          <p><span data-t="jn_p1">Мой путь связан с постоянным обучением, самостоятельным развитием и поиском решений в самых разных сферах. За годы я приобрёл практический опыт как в технических задачах, так и в работе с цифровыми инструментами и информацией.</span></p>
+          <p><span data-t="jn_p2">После переезда в Netherlands я продолжаю развиваться, изучаю нидерландский язык, осваиваю местные системы и постепенно строю карьеру в направлении офисной, аналитической и IT-сферы.</span></p>
+          <p><span data-t="jn_p3">Я привык самостоятельно разбираться в новых задачах, быстро адаптироваться и доводить работу до результата.</span></p>
+        </div>
+      </div>
+
+      <!-- Сильные стороны -->
+      <div class="info-card fu" style="transition-delay:.12s">
+        <div class="ic-head">
+          <div class="ic-ico">⚡</div>
+          <div>
+            <div class="ic-title" data-t="ic_strengths_title">Сильные стороны</div>
+            <div class="ic-sub" data-t="ic_strengths_sub">Strengths</div>
+          </div>
+        </div>
+        <div class="ic-body">
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div class="ic-strength-row"><span class="ic-str-ico">🧠</span><span class="ic-str-txt" data-t="str1">Аналитическое мышление</span></div>
+            <div class="ic-strength-row"><span class="ic-str-ico">🎯</span><span class="ic-str-txt" data-t="str2">Высокая самостоятельность</span></div>
+            <div class="ic-strength-row"><span class="ic-str-ico">⚡</span><span class="ic-str-txt" data-t="str3">Способность быстро обучаться</span></div>
+            <div class="ic-strength-row"><span class="ic-str-ico">🔍</span><span class="ic-str-txt" data-t="str4">Внимательность к деталям</span></div>
+            <div class="ic-strength-row"><span class="ic-str-ico">💡</span><span class="ic-str-txt" data-t="str5">Умение находить эффективные решения</span></div>
+            <div class="ic-strength-row"><span class="ic-str-ico">⚙️</span><span class="ic-str-txt" data-t="str6">Техническое понимание процессов</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ценности -->
+      <div class="info-card fu" style="transition-delay:.14s">
+        <div class="ic-head">
+          <div class="ic-ico">🎯</div>
+          <div>
+            <div class="ic-title" data-t="ic_values_title">Ценности</div>
+            <div class="ic-sub" data-t="ic_values_sub">Values</div>
+          </div>
+        </div>
+        <div class="ic-body">
+          <ul class="ic-list">
+            <li><span data-t="val1">Ответственность и надёжность</span></li>
+            <li><span data-t="val2">Постоянное развитие и обучение</span></li>
+            <li><span data-t="val3">Честность и уважение</span></li>
+            <li><span data-t="val4">Внимание к деталям</span></li>
+            <li><span data-t="val5">Практический подход к решению задач</span></li>
+            <li><span data-t="val6">Самостоятельность</span></li>
+            <li><span data-t="val7">Спокойствие и рациональность в сложных ситуациях</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Интересы -->
+      <div class="info-card fu" style="transition-delay:.16s">
+        <div class="ic-head">
+          <div class="ic-ico">💡</div>
+          <div>
+            <div class="ic-title" data-t="ic_interests_title">Интересы</div>
+            <div class="ic-sub" data-t="ic_interests_sub">Interests</div>
+          </div>
+        </div>
+        <div class="ic-body">
+          <div class="ic-tags">
+            <span class="ic-tag" data-t="int1">💻 Технологии и IT</span>
+            <span class="ic-tag" data-t="int2">🌐 Создание сайтов</span>
+            <span class="ic-tag" data-t="int3">📊 Аналитика</span>
+            <span class="ic-tag" data-t="int4">🗣️ Изучение языков</span>
+            <span class="ic-tag" data-t="int5">⚙️ Инженерные задачи</span>
+            <span class="ic-tag" data-t="int6">🚗 Автомобили и ремонт</span>
+            <span class="ic-tag" data-t="int7">📈 Саморазвитие</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Языки -->
+      <div class="info-card fu" style="transition-delay:.18s">
+        <div class="ic-head">
+          <div class="ic-ico">🗣️</div>
+          <div>
+            <div class="ic-title" data-t="ic_languages_title">Языки</div>
+            <div class="ic-sub" data-t="ic_languages_sub">Languages</div>
+          </div>
+        </div>
+        <div class="ic-body">
+          <div class="ic-lang-row"><span class="ic-flag">🇷🇺</span><span class="ic-lang-name" data-t="lname1">Русский</span><span class="ic-lang-level" data-t="lng1">Родной</span></div>
+          <div class="ic-lang-row"><span class="ic-flag">🇺🇦</span><span class="ic-lang-name" data-t="lname2">Украинский</span><span class="ic-lang-level" data-t="lng2">Свободно</span></div>
+          <div class="ic-lang-row"><span class="ic-flag">🇳🇱</span><span class="ic-lang-name" data-t="lname3">Нидерландский</span><span class="ic-lang-level" data-t="lng3">A2, в процессе</span></div>
+          <div class="ic-lang-row"><span class="ic-flag">🇬🇧</span><span class="ic-lang-name" data-t="lname4">Английский</span><span class="ic-lang-level" data-t="lng4">Базовый рабочий</span></div>
+        </div>
+      </div>
+
+    </div>
+  </div></div>
+  <div class="pg-foot"><div class="w"><div class="pf-lbl" data-t="contactLbl">Contact</div><div class="pf-links"><a class="pf-a" href="tel:0613571645">📞 0613571645</a><a class="pf-a" href="mailto:clash84all@gmail.com">✉️ clash84all@gmail.com</a></div></div></div>
+</div>
+
+<!-- ════ TECHNICAL ════ -->
+<div id="view-technical" class="view">
+  <div class="sv-hd"><div class="w"><button class="back" onclick="goHome()">← <span data-t="back">Back</span></button><div><div class="sv-eye">02</div><div class="sv-ttl" data-t="b2">Technical & Hands-on</div></div></div></div>
+  <div class="sv-body"><div class="w"><div class="sub-grid">
+    <div class="subcard fu" onclick="go('cars')"><span class="si">🚗</span><h4 data-t="sc_cars">Car repair</h4><p data-t="sc_cars_d">Diagnostics, replacement, servicing</p><span class="so">Open →</span></div>
+    <div class="subcard fu" onclick="det('electric')"     style="transition-delay:.05s"><span class="si">⚡</span><h4 data-t="sc_elec">Electrical</h4><p data-t="sc_elec_d">Installation, diagnostics, repair</p><span class="so">Open →</span></div>
+    <div class="subcard fu" onclick="det('construction')" style="transition-delay:.1s"><span class="si">🏗️</span><h4 data-t="sc_const">Construction</h4><p data-t="sc_const_d">Finishing, building, renovation</p><span class="so">Open →</span></div>
+    <div class="subcard fu" onclick="det('other_tech')"   style="transition-delay:.15s"><span class="si">🛠️</span><h4 data-t="sc_oth">Other skills</h4><p data-t="sc_oth_d">Further technical competencies</p><span class="so">Open →</span></div>
+  </div></div></div>
+  <div class="pg-foot"><div class="w"><div class="pf-lbl" data-t="contactLbl">Contact</div><div class="pf-links"><a class="pf-a" href="tel:0613571645">📞 0613571645</a></div></div></div>
+</div>
+
+<!-- ════ CARS ════ -->
+<div id="view-cars" class="view">
+  <div class="sv-hd"><div class="w"><button class="back" onclick="go('technical')">← <span data-t="back">Back</span></button><div><div class="sv-eye">02 › 🚗</div><div class="sv-ttl" data-t="sc_cars">Car repair</div></div></div></div>
+  <div class="sv-body"><div class="w"><div class="sub-grid" id="carsGrid"></div></div></div>
+  <div class="pg-foot"><div class="w"><div class="pf-lbl" data-t="contactLbl">Contact</div><div class="pf-links"><a class="pf-a" href="tel:0613571645">📞 0613571645</a></div></div></div>
+</div>
+
+<!-- ════ ANALYTICAL ════ -->
+<div id="view-analytical" class="view">
+  <div class="sv-hd"><div class="w"><button class="back" onclick="goHome()">← <span data-t="back">Back</span></button><div><div class="sv-eye">03</div><div class="sv-ttl" data-t="b3">Analytical Skills</div></div></div></div>
+  <div class="sv-body"><div class="w"><div class="sub-grid">
+    <div class="subcard fu" onclick="det('data_analysis')"><span class="si">📈</span><h4 data-t="sc_da">Data analysis</h4><p data-t="sc_da_d">Excel, spreadsheets, visualisation</p><span class="so">Open →</span></div>
+    <div class="subcard fu" onclick="det('research')"        style="transition-delay:.05s"><span class="si">🔍</span><h4 data-t="sc_res">Research</h4><p data-t="sc_res_d">Market, competitor and solution research</p><span class="so">Open →</span></div>
+    <div class="subcard fu" onclick="det('problem_solving')" style="transition-delay:.1s"><span class="si">🧩</span><h4 data-t="sc_ps">Problem solving</h4><p data-t="sc_ps_d">Structured approach to challenges</p><span class="so">Open →</span></div>
+    <div class="subcard fu" onclick="det('planning')"        style="transition-delay:.15s"><span class="si">📋</span><h4 data-t="sc_pln">Planning</h4><p data-t="sc_pln_d">Creating plans and prioritisation</p><span class="so">Open →</span></div>
+  </div></div></div>
+  <div class="pg-foot"><div class="w"><div class="pf-lbl" data-t="contactLbl">Contact</div><div class="pf-links"><a class="pf-a" href="tel:0613571645">📞 0613571645</a></div></div></div>
+</div>
+
+<!-- ════ DIGITAL ════ -->
+<div id="view-digital" class="view">
+  <div class="sv-hd"><div class="w"><button class="back" onclick="goHome()">← <span data-t="back">Back</span></button><div><div class="sv-eye">04</div><div class="sv-ttl" data-t="b4">Digital / IT Skills</div></div></div></div>
+  <div class="sv-body"><div class="w"><div class="sub-grid">
+    <div class="subcard fu" onclick="det('web')">       <span class="si">🌐</span><h4 data-t="sc_web">Web & dev</h4><p data-t="sc_web_d">HTML, CSS, JS, frontend basics</p><span class="so">Open →</span></div>
+    <div class="subcard fu" onclick="det('tools')"      style="transition-delay:.05s"><span class="si">🛠️</span><h4 data-t="sc_tls">Tools</h4><p data-t="sc_tls_d">Figma, Notion, Office, AI tools</p><span class="so">Open →</span></div>
+    <div class="subcard fu" onclick="det('automation')" style="transition-delay:.1s"><span class="si">🤖</span><h4 data-t="sc_aut">Automation</h4><p data-t="sc_aut_d">Scripts, Zapier, Make, bots</p><span class="so">Open →</span></div>
+    <div class="subcard fu" onclick="det('security')"   style="transition-delay:.15s"><span class="si">🔐</span><h4 data-t="sc_sec">Security</h4><p data-t="sc_sec_d">Basic cybersecurity skills</p><span class="so">Open →</span></div>
+  </div></div></div>
+  <div class="pg-foot"><div class="w"><div class="pf-lbl" data-t="contactLbl">Contact</div><div class="pf-links"><a class="pf-a" href="tel:0613571645">📞 0613571645</a></div></div></div>
+</div>
+
+<!-- ════ CASES ════ -->
+<div id="view-cases" class="view">
+  <div class="sv-hd"><div class="w"><button class="back" onclick="goHome()">← <span data-t="back">Back</span></button><div><div class="sv-eye">05</div><div class="sv-ttl" data-t="b5">Real-world Cases</div></div></div></div>
+  <div class="sv-body"><div class="w"><div class="sub-grid">
+    <div class="subcard fu" onclick="det('case1')"><span class="si">🔧</span><h4 data-t="sc_c1">Case 1</h4><p data-t="sc_c1_d">Add your case description</p><span class="so">Open →</span></div>
+    <div class="subcard fu" onclick="det('case2')" style="transition-delay:.05s"><span class="si">🚀</span><h4 data-t="sc_c2">Case 2</h4><p data-t="sc_c2_d">Add your case description</p><span class="so">Open →</span></div>
+    <div class="subcard fu" onclick="det('case3')" style="transition-delay:.1s"><span class="si">💼</span><h4 data-t="sc_c3">Case 3</h4><p data-t="sc_c3_d">Add your case description</p><span class="so">Open →</span></div>
+    <div class="subcard fu" onclick="det('case4')" style="transition-delay:.15s"><span class="si">🌟</span><h4 data-t="sc_c4">Case 4</h4><p data-t="sc_c4_d">Add your case description</p><span class="so">Open →</span></div>
+  </div></div></div>
+  <div class="pg-foot"><div class="w"><div class="pf-lbl" data-t="contactLbl">Contact</div><div class="pf-links"><a class="pf-a" href="tel:0613571645">📞 0613571645</a></div></div></div>
+</div>
+
+<!-- ════ DETAIL ════ -->
+<div id="view-detail" class="view">
+  <div class="sv-hd"><div class="w"><button class="back" id="detBack">← <span data-t="back">Back</span></button><div><div class="sv-eye" id="detEye"></div><div class="sv-ttl" id="detTitle"></div></div></div></div>
+  <div class="det-body"><div class="w">
+    <div class="det-box"><p class="det-txt" id="detTxt" contenteditable="false"></p></div>
+    <div class="det-box" id="detToolsBox" style="display:none"><div class="det-lbl" data-t="tlbl">Tools & Materials</div><div class="chips" id="detChips"></div></div>
+    <div class="det-box"><div class="det-lbl" data-t="plbl">Photos</div><div class="mosaic" id="detPhotos"></div></div>
+  </div></div>
+  <div class="pg-foot"><div class="w"><div class="pf-lbl" data-t="contactLbl">Contact</div><div class="pf-links"><a class="pf-a" href="tel:0613571645">📞 0613571645</a><a class="pf-a" href="mailto:clash84all@gmail.com">✉️ clash84all@gmail.com</a></div></div></div>
+</div>
+
+<button class="efab" id="editFab" onclick="toggleEdit()"><span id="efIco">✏</span><span data-t="editBtn">Edit</span></button>
+
+<script>
+/* ── CURSOR — glowing dot instant, ring slight lag ── */
+const c1=document.getElementById('cur'),c2=document.getElementById('cur2');
+let rx=0,ry=0,tx=0,ty=0;
+document.addEventListener('mousemove',e=>{
+  tx=e.clientX;ty=e.clientY;
+  c1.style.left=tx+'px';c1.style.top=ty+'px';
+});
+(function loop(){
+  rx+=(tx-rx)*.2;ry+=(ty-ry)*.2;
+  c2.style.left=rx+'px';c2.style.top=ry+'px';
+  requestAnimationFrame(loop);
+})();
+
+/* TRANSLATIONS */
+const T={
+  en:{
+    status:'Open to opportunities',avail:'Available',tagline:'Multi-skilled specialist',
+    heroBtn1:'Explore →',heroBtn2:'Contact',
+    b1:'About me',b1d:'Who I am, values and languages',
+    b2:'Technical',b2d:'Cars, electrics, construction',
+    b3:'Analytical',b3d:'Data, research & decisions',
+    b4:'Digital / IT',b4d:'Web, tools & automation',
+    b5:'Real-world Cases',b5d:'Concrete projects and real-life experiences',
+    b6:'Contact',
+    back:'Back',openArr:'Open →',contactLbl:'Contact',
+    sc_bg:'My journey',sc_bg_d:'Background and how my experience formed',
+    sc_val:'Values & approach',sc_val_d:'How I approach work and life',
+    sc_lng:'Languages',sc_lng_d:'English, Dutch, Russian',
+    sc_int:'Interests',sc_int_d:'What excites me outside work',
+    sc_cars:'Car repair',sc_cars_d:'Diagnostics, replacement, servicing',
+    sc_elec:'Electrical',sc_elec_d:'Installation, diagnostics, repair',
+    sc_const:'Construction',sc_const_d:'Finishing, building, renovation',
+    sc_oth:'Other skills',sc_oth_d:'Further technical competencies',
+    sc_da:'Data analysis',sc_da_d:'Excel, spreadsheets, visualisation',
+    sc_res:'Research',sc_res_d:'Market, competitor and solution research',
+    sc_ps:'Problem solving',sc_ps_d:'Structured approach to challenges',
+    sc_pln:'Planning',sc_pln_d:'Creating plans and prioritisation',
+    sc_web:'Web & dev',sc_web_d:'HTML, CSS, JS, frontend basics',
+    sc_tls:'Tools',sc_tls_d:'Figma, Notion, Office, AI tools',
+    sc_aut:'Automation',sc_aut_d:'Scripts, Zapier, Make, bots',
+    sc_sec:'Security',sc_sec_d:'Basic cybersecurity skills',
+    sc_c1:'Case 1',sc_c1_d:'Add your case description',
+    sc_c2:'Case 2',sc_c2_d:'Add your case description',
+    sc_c3:'Case 3',sc_c3_d:'Add your case description',
+    sc_c4:'Case 4',sc_c4_d:'Add your case description',
+    tlbl:'Tools & Materials',plbl:'Photos',editBtn:'Edit',
+    ic_about_title:'About me', ic_journey_title:'My journey',
+    ic_strengths_title:'Strengths', ic_values_title:'Values',
+    ic_interests_title:'Interests', ic_languages_title:'Languages',
+    ic_journey_sub:'Background', ic_strengths_sub:'Strengths',
+    ic_values_sub:'Values', ic_interests_sub:'Interests', ic_languages_sub:'Languages',
+    ab_p1:'My name is Ali Shukiurov. I live in Goor, Netherlands.',
+    ab_p2:'I have an analytical mindset and broad practical experience in technical, administrative and digital tasks. I quickly get to grips with new systems, find solutions in non-standard situations and independently master the necessary tools.',
+    ab_p3:'I have worked on various types of tasks:',
+    ab_li1:'administrative work and work with digital systems',
+    ab_li2:'technical and repair work',
+    ab_li3:'basic work with websites and IT tools',
+    ab_li4:'information search and analysis',
+    ab_li5:'solving organisational and practical problems',
+    ab_p4:'I am currently developing in the office, analytical and IT field, while also open to practical work where responsibility, resourcefulness and problem-solving are valued.',
+    jn_p1:'My journey is about continuous learning, self-development and finding solutions across many fields. Over the years I have gained practical experience in both technical tasks and work with digital tools and information.',
+    jn_p2:'After moving to the Netherlands I continue to develop, study Dutch, learn local systems and gradually build a career in the office, analytical and IT field.',
+    jn_p3:'I am used to independently tackling new tasks, adapting quickly and delivering results.',
+    str1:'Analytical thinking', str2:'High independence', str3:'Ability to learn quickly',
+    str4:'Attention to detail', str5:'Ability to find effective solutions', str6:'Technical process understanding',
+    val1:'Responsibility and reliability', val2:'Continuous development and learning',
+    val3:'Honesty and respect', val4:'Attention to detail',
+    val5:'Practical approach to problem solving', val6:'Independence',
+    val7:'Calm and rational in difficult situations',
+    int1:'💻 Technology & IT', int2:'🌐 Web development', int3:'📊 Analytics',
+    int4:'🗣️ Language learning', int5:'⚙️ Engineering tasks', int6:'🚗 Cars & repair', int7:'📈 Self-development',
+    lng1:'Native', lng2:'Fluent', lng3:'A2, learning', lng4:'Basic working level',
+    lname1:'Russian', lname2:'Ukrainian', lname3:'Dutch', lname4:'English',
+  },
+  nl:{
+    status:'Open voor mogelijkheden',avail:'Beschikbaar',tagline:'Veelzijdig specialist',
+    heroBtn1:'Bekijken →',heroBtn2:'Contact',
+    b1:'Over mij',b1d:'Wie ik ben, waarden en talen',
+    b2:'Technisch',b2d:"Auto's, elektra, bouw",
+    b3:'Analytisch',b3d:'Data, onderzoek & beslissingen',
+    b4:'Digitaal / IT',b4d:'Web, tools & automatisering',
+    b5:'Praktijkervaring',b5d:'Concrete projecten en levensechte ervaringen',
+    b6:'Contact',
+    back:'Terug',openArr:'Openen →',contactLbl:'Contact',
+    sc_bg:'Mijn reis',sc_bg_d:'Achtergrond en hoe mijn ervaring ontstond',
+    sc_val:'Waarden & aanpak',sc_val_d:'Hoe ik werk en leven benadert',
+    sc_lng:'Talen',sc_lng_d:'Engels, Nederlands, Russisch',
+    sc_int:'Interesses',sc_int_d:'Wat mij buiten werk fascineert',
+    sc_cars:'Autoreparatie',sc_cars_d:'Diagnose, onderdelen, onderhoud',
+    sc_elec:'Elektra',sc_elec_d:'Installatie, diagnose, reparatie',
+    sc_const:'Bouw',sc_const_d:'Afwerking, bouwen, renovatie',
+    sc_oth:'Overige',sc_oth_d:'Andere technische competenties',
+    sc_da:'Data-analyse',sc_da_d:'Excel, spreadsheets, visualisatie',
+    sc_res:'Onderzoek',sc_res_d:'Markt- en concurrentieonderzoek',
+    sc_ps:'Probleemoplossing',sc_ps_d:'Gestructureerde aanpak',
+    sc_pln:'Planning',sc_pln_d:'Plannen maken en prioriteiten stellen',
+    sc_web:'Web & dev',sc_web_d:'HTML, CSS, JS, frontend basics',
+    sc_tls:'Tools',sc_tls_d:'Figma, Notion, Office, AI-tools',
+    sc_aut:'Automatisering',sc_aut_d:'Scripts, Zapier, Make, bots',
+    sc_sec:'Beveiliging',sc_sec_d:'Basis cybersecurity vaardigheden',
+    sc_c1:'Case 1',sc_c1_d:'Voeg je case beschrijving toe',
+    sc_c2:'Case 2',sc_c2_d:'Voeg je case beschrijving toe',
+    sc_c3:'Case 3',sc_c3_d:'Voeg je case beschrijving toe',
+    sc_c4:'Case 4',sc_c4_d:'Voeg je case beschrijving toe',
+    tlbl:'Gereedschap & Materialen',plbl:"Foto's",editBtn:'Bewerken',
+    ic_about_title:'Over mij', ic_journey_title:'Mijn reis',
+    ic_strengths_title:'Sterke punten', ic_values_title:'Waarden',
+    ic_interests_title:'Interesses', ic_languages_title:'Talen',
+    ic_journey_sub:'Achtergrond', ic_strengths_sub:'Sterke punten',
+    ic_values_sub:'Waarden', ic_interests_sub:'Interesses', ic_languages_sub:'Talen',
+    ab_p1:'Mijn naam is Ali Shukiurov. Ik woon in Goor, Nederland.',
+    ab_p2:'Ik heb een analytische instelling en brede praktische ervaring op het gebied van technische, administratieve en digitale taken. Ik leer snel nieuwe systemen kennen, vind oplossingen in niet-standaard situaties en beheers zelfstandig de benodigde tools.',
+    ab_p3:'Ik heb gewerkt aan verschillende soorten taken:',
+    ab_li1:'administratief werk en werken met digitale systemen',
+    ab_li2:'technische werkzaamheden en reparaties',
+    ab_li3:'basiswerk met websites en IT-tools',
+    ab_li4:'zoeken en analyseren van informatie',
+    ab_li5:'oplossen van organisatorische en praktische problemen',
+    ab_p4:'Ik ontwikkel me momenteel in de richting van kantoor-, analytische en IT-sector, maar sta ook open voor praktisch werk waar verantwoordelijkheid, vindingrijkheid en probleemoplossend vermogen worden gewaardeerd.',
+    jn_p1:'Mijn weg is verbonden met voortdurend leren, zelfstandige ontwikkeling en het vinden van oplossingen op de meest uiteenlopende gebieden. In de loop der jaren heb ik praktische ervaring opgedaan met technische taken en met digitale tools en informatie.',
+    jn_p2:'Na mijn verhuizing naar Nederland blijf ik me ontwikkelen, studeer ik Nederlands, leer ik lokale systemen kennen en bouw ik stap voor stap een carrière op in de kantoor-, analytische en IT-sector.',
+    jn_p3:'Ik ben gewend om zelfstandig nieuwe taken aan te pakken, snel te adapteren en werk tot een resultaat te brengen.',
+    str1:'Analytisch denken', str2:'Hoge zelfstandigheid', str3:'Vermogen om snel te leren',
+    str4:'Aandacht voor detail', str5:'Vermogen om effectieve oplossingen te vinden', str6:'Technisch procesinzicht',
+    val1:'Verantwoordelijkheid en betrouwbaarheid', val2:'Continue ontwikkeling en leren',
+    val3:'Eerlijkheid en respect', val4:'Aandacht voor detail',
+    val5:'Praktische aanpak bij probleemoplossing', val6:'Zelfstandigheid',
+    val7:'Rust en rationaliteit in moeilijke situaties',
+    int1:'💻 Technologie & IT', int2:'🌐 Webontwikkeling', int3:'📊 Analyse',
+    int4:'🗣️ Talen leren', int5:'⚙️ Technische taken', int6:"🚗 Auto's & reparatie", int7:'📈 Zelfontwikkeling',
+    lng1:'Moedertaal', lng2:'Vloeiend', lng3:'A2, in leerproces', lng4:'Basiswerkniveau',
+    lname1:'Russisch', lname2:'Oekraïens', lname3:'Nederlands', lname4:'Engels',
+  },
+  ru:{
+    status:'Открыт к возможностям',avail:'Доступен',tagline:'Многопрофильный специалист',
+    heroBtn1:'Изучить →',heroBtn2:'Контакт',
+    b1:'Обо мне',b1d:'Кто я, ценности и языки',
+    b2:'Технические',b2d:'Авто, электрика, стройка',
+    b3:'Аналитика',b3d:'Данные, исследования и решения',
+    b4:'Цифровые / IT',b4d:'Веб, инструменты и автоматизация',
+    b5:'Реальный опыт',b5d:'Конкретные проекты и жизненный опыт',
+    b6:'Контакты',
+    back:'Назад',openArr:'Открыть →',contactLbl:'Связаться',
+    sc_bg:'Мой путь',sc_bg_d:'Откуда я, как сложился мой опыт',
+    sc_val:'Ценности',sc_val_d:'Как я подхожу к работе и жизни',
+    sc_lng:'Языки',sc_lng_d:'Английский, нидерландский, русский',
+    sc_int:'Интересы',sc_int_d:'Что меня увлекает вне работы',
+    sc_cars:'Авторемонт',sc_cars_d:'Диагностика, замена, обслуживание',
+    sc_elec:'Электрика',sc_elec_d:'Монтаж, диагностика, ремонт',
+    sc_const:'Строительство',sc_const_d:'Отделка, стройка, ремонт',
+    sc_oth:'Другие навыки',sc_oth_d:'Прочие технические компетенции',
+    sc_da:'Анализ данных',sc_da_d:'Excel, таблицы, визуализация',
+    sc_res:'Исследования',sc_res_d:'Изучение рынка, конкурентов, решений',
+    sc_ps:'Решение проблем',sc_ps_d:'Структурированный подход к задачам',
+    sc_pln:'Планирование',sc_pln_d:'Составление планов, приоритизация',
+    sc_web:'Веб & разработка',sc_web_d:'HTML, CSS, JS, основы фронтенда',
+    sc_tls:'Инструменты',sc_tls_d:'Figma, Notion, Office, AI-инструменты',
+    sc_aut:'Автоматизация',sc_aut_d:'Скрипты, Zapier, Make, боты',
+    sc_sec:'Безопасность',sc_sec_d:'Базовые навыки кибербезопасности',
+    sc_c1:'Кейс 1',sc_c1_d:'Добавь описание своего кейса',
+    sc_c2:'Кейс 2',sc_c2_d:'Добавь описание своего кейса',
+    sc_c3:'Кейс 3',sc_c3_d:'Добавь описание своего кейса',
+    sc_c4:'Кейс 4',sc_c4_d:'Добавь описание своего кейса',
+    tlbl:'Инструменты / Материалы',plbl:'Фотографии',editBtn:'Редактировать',
+    ic_about_title:'Обо мне', ic_journey_title:'Мой путь',
+    ic_strengths_title:'Сильные стороны', ic_values_title:'Ценности',
+    ic_interests_title:'Интересы', ic_languages_title:'Языки',
+    ic_journey_sub:'Background', ic_strengths_sub:'Strengths',
+    ic_values_sub:'Values', ic_interests_sub:'Interests', ic_languages_sub:'Languages',
+    ab_p1:'Меня зовут Али Шукюров. Я живу в Goor, Нидерланды.',
+    ab_p2:'У меня аналитический склад ума и широкий практический опыт в технических, административных и цифровых задачах. Я умею быстро разбираться в новых системах, находить решения в нестандартных ситуациях и самостоятельно осваивать необходимые инструменты.',
+    ab_p3:'Работал с различными видами задач:',
+    ab_li1:'административная работа и работа с цифровыми системами',
+    ab_li2:'технические и ремонтные работы',
+    ab_li3:'базовая работа с сайтами и IT-инструментами',
+    ab_li4:'поиск и анализ информации',
+    ab_li5:'решение организационных и практических вопросов',
+    ab_p4:'Сейчас я развиваюсь в направлении офисной, аналитической и IT-сферы, при этом открыт и к практической работе, где ценятся ответственность, сообразительность и умение решать задачи.',
+    jn_p1:'Мой путь связан с постоянным обучением, самостоятельным развитием и поиском решений в самых разных сферах. За годы я приобрёл практический опыт как в технических задачах, так и в работе с цифровыми инструментами и информацией.',
+    jn_p2:'После переезда в Netherlands я продолжаю развиваться, изучаю нидерландский язык, осваиваю местные системы и постепенно строю карьеру в направлении офисной, аналитической и IT-сферы.',
+    jn_p3:'Я привык самостоятельно разбираться в новых задачах, быстро адаптироваться и доводить работу до результата.',
+    str1:'Аналитическое мышление', str2:'Высокая самостоятельность', str3:'Способность быстро обучаться',
+    str4:'Внимательность к деталям', str5:'Умение находить эффективные решения', str6:'Техническое понимание процессов',
+    val1:'Ответственность и надёжность', val2:'Постоянное развитие и обучение',
+    val3:'Честность и уважение', val4:'Внимание к деталям',
+    val5:'Практический подход к решению задач', val6:'Самостоятельность',
+    val7:'Спокойствие и рациональность в сложных ситуациях',
+    int1:'💻 Технологии и IT', int2:'🌐 Создание сайтов', int3:'📊 Аналитика',
+    int4:'🗣️ Изучение языков', int5:'⚙️ Инженерные задачи', int6:'🚗 Автомобили и ремонт', int7:'📈 Саморазвитие',
+    lng1:'Родной', lng2:'Свободно', lng3:'A2, в процессе', lng4:'Базовый рабочий',
+    lname1:'Русский', lname2:'Украинский', lname3:'Нидерландский', lname4:'Английский',
+  }
+};
+
+/* ══════════════════════════════════════════
+   HOW TO ADD PHOTOS TO SECTIONS:
+   
+   Find the section key below (e.g. 'electric', 'brakes', 'case1' etc.)
+   and add image paths to the photos array:
+   
+   photos: ['images/photo1.jpg', 'images/photo2.jpg']
+   
+   Or use full URLs:
+   photos: ['https://example.com/photo.jpg']
+   
+   Put your images in an 'images/' folder next to index.html
+══════════════════════════════════════════ */
+const DT={
+  background:{eye:'01',title:'🌱 My Journey',text:'Tell your story here — where you are from, how your experience developed.\n\nClick Edit to modify.',tools:[],photos:[]},
+  values:    {eye:'01',title:'🎯 Values & Approach',text:'Describe your values and approach to work.\n\nClick Edit.',tools:[],photos:[]},
+  languages: {eye:'01',title:'🗣️ Languages',text:'🇬🇧 English — advanced\n🇳🇱 Dutch — intermediate\n🇷🇺 Russian — native',tools:[],photos:[]},
+  interests: {eye:'01',title:'💡 Interests',text:'Describe what interests you. Click Edit.',tools:[],photos:[]},
+  electric:  {eye:'02',title:'⚡ Electrical',text:'Describe your electrical work.',tools:['Multimeter','Drill','Cable','Tape','RCD'],photos:[]},
+  construction:{eye:'02',title:'🏗️ Construction',text:'Describe your construction work.',tools:['Perforator','Plaster','Level','Rule','Grinder'],photos:[]},
+  other_tech:{eye:'02',title:'🛠️ Other Skills',text:'Describe other technical skills.',tools:[],photos:[]},
+  data_analysis:{eye:'03',title:'📈 Data Analysis',text:'Describe how you work with data.',tools:['Excel','Google Sheets','SQL','Power BI'],photos:[]},
+  research:  {eye:'03',title:'🔍 Research',text:'Describe your research experience.',tools:[],photos:[]},
+  problem_solving:{eye:'03',title:'🧩 Problem Solving',text:'How do you approach complex challenges?',tools:[],photos:[]},
+  planning:  {eye:'03',title:'📋 Planning',text:'Describe your planning skills.',tools:['Notion','Trello','Google Calendar'],photos:[]},
+  web:       {eye:'04',title:'🌐 Web & Dev',text:'Describe your web experience.',tools:['HTML','CSS','JavaScript','Git'],photos:[]},
+  tools:     {eye:'04',title:'🛠️ Tools',text:'Which digital tools do you master?',tools:['Figma','Notion','MS Office','ChatGPT','Canva'],photos:[]},
+  automation:{eye:'04',title:'🤖 Automation',text:'Describe automation experience.',tools:['Zapier','Make','Python','Apps Script'],photos:[]},
+  security:  {eye:'04',title:'🔐 Security',text:'Describe cybersecurity knowledge.',tools:[],photos:[]},
+  case1:{eye:'05',title:'🔧 Case 1',text:'Describe your first case. Click Edit.',tools:[],photos:[]},
+  case2:{eye:'05',title:'🚀 Case 2',text:'Describe your second case.',tools:[],photos:[]},
+  case3:{eye:'05',title:'💼 Case 3',text:'Describe your third case.',tools:[],photos:[]},
+  case4:{eye:'05',title:'🌟 Case 4',text:'Describe your fourth case.',tools:[],photos:[]},
+};
+
+const CARS=[
+  {key:'timing_belt',ico:'⚙️',en:'Timing Belt',nl:'Distributieriem',ru:'Ремень ГРМ',desc:'Full timing kit replacement',tools:['Puller','Wrenches','Gates belt','Tensioner','Water pump'],text:'Describe timing belt replacement. Click Edit.',photos:[]},
+  {key:'brakes',ico:'🛑',en:'Brake System',nl:'Remsysteem',ru:'Тормозная система',desc:'Pads, discs, callipers',tools:['Calliper tool','Brake fluid','Pads','Discs'],text:'Describe your brake work.',photos:[]},
+  {key:'suspension',ico:'🔩',en:'Suspension',nl:'Ophanging',ru:'Подвеска',desc:'Struts, arms, bearings',tools:['Strut tool','Press','Hammer','Wrenches'],text:'Describe your suspension work.',photos:[]},
+  {key:'oil',ico:'🛢️',en:'Oil & Filter Service',nl:'Olie Wissel',ru:'Замена масла',desc:'Engine oil & filters',tools:['Filter wrench','Oil','Filters'],text:'Describe engine servicing.',photos:[]},
+  {key:'diag',ico:'📡',en:'Computer Diagnostics',nl:'Computerdiagnose',ru:'Диагностика',desc:'Error codes & sensors',tools:['OBD2 scanner','ELM327','Launch X431'],text:'Describe diagnostic experience.',photos:[]},
+  {key:'car_elec',ico:'⚡',en:'Car Electrics',nl:'Auto Elektra',ru:'Электрика авто',desc:'Wiring, battery, alternator',tools:['Multimeter','Soldering iron','Battery'],text:'Describe car electrical work.',photos:[]},
+];
+
+let lang='en',editMode=false,detParent='home';
+
+function setLang(l){
+  lang=l;
+  document.querySelectorAll('.lb').forEach(b=>b.classList.remove('on'));
+  document.querySelector(`.lb[onclick="setLang('${l}')"]`).classList.add('on');
+  const t=T[l];
+  document.querySelectorAll('[data-t]').forEach(el=>{const k=el.dataset.t;if(t[k]!==undefined)el.textContent=t[k];});
+  if(document.getElementById('carsGrid').children.length)buildCarsGrid();
+}
+
+function go(name){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  const el=document.getElementById('view-'+name);if(!el)return;
+  el.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+  closeDrawer();
+  requestAnimationFrame(()=>el.querySelectorAll('.fu:not(.in)').forEach(e=>e.classList.add('in')));
+  if(name==='cars')buildCarsGrid();
+}
+function goHome(){go('home')}
+function scrollCont(){
+  goHome();
+  setTimeout(()=>document.getElementById('contCell')?.scrollIntoView({behavior:'smooth',block:'center'}),150);
+}
+
+function buildCarsGrid(){
+  const g=document.getElementById('carsGrid');g.innerHTML='';
+  const t=T[lang];
+  CARS.forEach((car,i)=>{
+    const title=car[lang]||car.en;
+    const d=document.createElement('div');
+    d.className='subcard fu';d.style.transitionDelay=(i*.06)+'s';
+    d.innerHTML=`<span class="si">${car.ico}</span><h4>${title}</h4><p>${car.desc}</p><span class="so">${t.openArr}</span>`;
+    d.onclick=()=>{
+      if(!DT[car.key])DT[car.key]={eye:'02 › '+title,title:car.ico+' '+title,text:car.text,tools:car.tools,photos:car.photos};
+      DT[car.key].eye='02 › '+title;DT[car.key].title=car.ico+' '+title;
+      det(car.key,'cars');
+    };
+    g.appendChild(d);
+  });
+  obsAll();
+}
+
+function det(key,parent){
+  detParent=parent||'home';
+  const d=DT[key];if(!d)return;
+  document.getElementById('detEye').textContent=d.eye;
+  document.getElementById('detTitle').textContent=d.title;
+  const tx=document.getElementById('detTxt');tx.textContent=d.text;tx.contentEditable=editMode;
+  document.getElementById('detBack').onclick=()=>go(detParent);
+  const tb=document.getElementById('detToolsBox'),tc=document.getElementById('detChips');
+  if(d.tools&&d.tools.length){tb.style.display='block';tc.innerHTML=d.tools.map(t=>`<span class="chip">${t}</span>`).join('');}
+  else tb.style.display='none';
+  renderPhotos(key);go('detail');
+}
+
+function renderPhotos(key){
+  const d=DT[key];const g=document.getElementById('detPhotos');g.innerHTML='';
+  // Show stored photos (real ones added via code)
+  d.photos.forEach((src,i)=>{
+    const s=document.createElement('div');s.className='ps has';
+    const img=document.createElement('img');img.src=src;
+    const ph=document.createElement('div');ph.className='ps-ph';
+    s.appendChild(img);s.appendChild(ph);
+    g.appendChild(s);
+  });
+  // If no photos yet — show placeholder slots with grey template image
+  if(d.photos.length===0){
+    // Show 3 placeholder slots
+    for(let i=0;i<3;i++){
+      const s=document.createElement('div');s.className='ps';
+      s.innerHTML=`
+        <div class="ps-placeholder">
+          <svg viewBox="0 0 80 60" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:56px;opacity:.35">
+            <rect x="1" y="1" width="78" height="58" rx="6" stroke="rgba(200,130,10,.4)" stroke-width="1.5"/>
+            <circle cx="26" cy="22" r="8" fill="rgba(200,130,10,.18)"/>
+            <path d="M8 52 Q8 36 26 36 Q40 30 52 36 Q62 40 72 52" fill="rgba(200,130,10,.12)"/>
+            <path d="M48 28 L58 18 L72 32" stroke="rgba(200,130,10,.3)" stroke-width="1.5" stroke-linejoin="round"/>
+            <circle cx="58" cy="16" r="5" fill="rgba(200,130,10,.2)"/>
+          </svg>
+          <span class="ps-ph-lbl">photo_${i+1}.jpg</span>
+          <span class="ps-ph-hint">replace src in code</span>
+        </div>`;
+      g.appendChild(s);
+    }
+  }
+}
+
+function toggleDrawer(){document.getElementById('drawer').classList.toggle('open')}
+function closeDrawer(){document.getElementById('drawer').classList.remove('open')}
+
+function toggleEdit(){
+  editMode=!editMode;
+  const fab=document.getElementById('editFab');
+  fab.classList.toggle('on',editMode);
+  document.getElementById('efIco').textContent=editMode?'✓':'✏';
+  fab.querySelector('[data-t="editBtn"]').textContent=editMode?(lang==='ru'?'Готово':lang==='nl'?'Klaar':'Done'):T[lang].editBtn;
+  const tx=document.getElementById('detTxt');if(tx)tx.contentEditable=editMode;
+}
+
+function obsAll(){
+  const obs=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');obs.unobserve(e.target);}});
+  },{threshold:.07});
+  document.querySelectorAll('.fu:not(.in)').forEach(el=>obs.observe(el));
+}
+obsAll();
+setLang('en');
+go('home');
+</script>
+</body>
+</html>
