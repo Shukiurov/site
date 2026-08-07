@@ -31,6 +31,9 @@ function setLang(l) {
   if (currentDetKey && document.getElementById('view-detail')?.classList.contains('active')) {
     det(currentDetKey, detParent);
   }
+
+  // Notify chat widget of language change
+  document.dispatchEvent(new CustomEvent('languageChanged', { detail: l }));
 }
 
 function go(name) {
